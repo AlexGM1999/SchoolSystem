@@ -37,17 +37,19 @@ namespace SchoolSystem
                   Console.WriteLine("The average grade for Class {0} is: ",classID);
                   Console.WriteLine(operations.AverageGradePerClass(classID));*/
 
-           /* Console.WriteLine("Select class to see students sorted by name");
-            char classID = char.Parse(Console.ReadLine());
-            foreach (var l in operations.SortByName(classID))
-            {
-                Console.WriteLine(l.ToString());
-            }*/
+            /* Console.WriteLine("Select class to see students sorted by name");
+             char classID = char.Parse(Console.ReadLine());
+             foreach (var l in operations.SortByName(classID))
+             {
+                 Console.WriteLine(l.ToString());
+             }*/
 
-            foreach (var classes  in operations.DisplayAllClasses())
+            /*foreach (var classes  in operations.DisplayAllClasses())
             {
                 Console.WriteLine(classes);
-            }
+            }*/
+            Generator gen = new Generator();
+            gen.GenerateClasses();
 
         }
     }
