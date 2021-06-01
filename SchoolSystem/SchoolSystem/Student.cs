@@ -8,17 +8,20 @@ namespace SchoolSystem
     {
         private string firstName;
         private string lastName;
-        private int averageGrade;
+        private decimal averageGrade;
+        private char studentGrade;
 
-        public Student(string fName, string lName, int aGrade)
+        public Student(string firstName, string lastName, decimal averageGrade, char studentGrade)
         {
-            FirstName = fName;
-            LastName = lName;
-            AverageGrade = aGrade;
+            FirstName = firstName;
+            LastName = lastName;
+            AverageGrade = averageGrade;
+            StudentGrade = studentGrade;
         }
 
-        public int AverageGrade { get => averageGrade; set => averageGrade = value; }
+        public decimal AverageGrade { get => averageGrade; set => averageGrade = value; }
         public string LastName { get => lastName; set => lastName = value; }
         public string FirstName { get => firstName; set => firstName = value; }
+        public char StudentGrade { get => studentGrade; set => studentGrade = value; }
     }
 }
