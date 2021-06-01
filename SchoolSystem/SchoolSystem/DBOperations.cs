@@ -154,7 +154,7 @@ namespace SchoolSystem
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    classes.Add($" Class: {reader["Id"]}, Teacher: {reader["Teacher"]}," +
+                    classes.Add($" Class: {reader["Id"]}, Teacher: {reader["Teacher"]}, " +
                         $"Student count: {reader["StudentCount"]} ");
                 }
                 return classes;
@@ -191,7 +191,7 @@ namespace SchoolSystem
             con.Open();
             try
             {
-                SqlCommand command = new SqlCommand("DELETE FROM Student");
+                SqlCommand command = new SqlCommand("DELETE FROM Students",con);
                 command.ExecuteNonQuery();
                 command.CommandText = "DELETE FROM SchoolClasses";
                 command.ExecuteNonQuery();
