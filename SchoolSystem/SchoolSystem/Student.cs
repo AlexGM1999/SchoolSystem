@@ -8,10 +8,10 @@ namespace SchoolSystem
     {
         private string firstName;
         private string lastName;
-        private decimal averageGrade;
+        private double averageGrade;
         private char studentGrade;
 
-        public Student(string firstName, string lastName, decimal averageGrade, char studentGrade)
+        public Student(string firstName, string lastName, double averageGrade, char studentGrade)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -19,9 +19,14 @@ namespace SchoolSystem
             StudentGrade = studentGrade;
         }
 
-        public decimal AverageGrade { get => averageGrade; set => averageGrade = value; }
+        public double AverageGrade { get => averageGrade; set => averageGrade = value; }
         public string LastName { get => lastName; set => lastName = value; }
         public string FirstName { get => firstName; set => firstName = value; }
         public char StudentGrade { get => studentGrade; set => studentGrade = value; }
+
+        public override string ToString()
+        {
+            return $"Name: {FirstName} {LastName}, Average Grade: {AverageGrade}, Class: {StudentGrade}";
+        }
     }
 }

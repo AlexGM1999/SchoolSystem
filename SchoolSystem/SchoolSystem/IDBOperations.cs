@@ -9,8 +9,10 @@ namespace SchoolSystem
         public SqlConnection Connection();
         public Student CreateStudent(Student student);
         public SchoolClass CreateClass(SchoolClass schoolClass);
-        public double AverageGradePerClass();
-        public List<Student> SortByAverageGrade();
-        public List<Student> SortByName();
+        public double AverageGradePerClass(char classID);
+        public List<Student> SortByAverageGrade(char classID);
+        public List<Student> SortByName(char classID);
+
+        public List<string> DisplayAllClasses();
     }
 }
