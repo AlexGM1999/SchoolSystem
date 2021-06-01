@@ -21,23 +21,37 @@ namespace SchoolSystem
         {
             var con = Connection();
             con.Open();
-            SqlCommand command = new SqlCommand($"INSERT INTO Students " +
-                 $"(FirstName, LastName, AverageGrade, ClassID)" +
-                 $" VALUES ('{student.FirstName}','{student.LastName}',{student.AverageGrade}," +
-                 $"'{student.StudentGrade}')", con);
-            command.ExecuteNonQuery();
-            return student;
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO Students " +
+                     $"(FirstName, LastName, AverageGrade, ClassID)" +
+                     $" VALUES ('{student.FirstName}','{student.LastName}',{student.AverageGrade}," +
+                     $"'{student.StudentGrade}')", con);
+                command.ExecuteNonQuery();
+                return student;
+            }
+            finally
+            {
+                con.Close();
+            }
         }
 
         public SchoolClass CreateClass(SchoolClass schClass)
         {
             var con = Connection();
             con.Open();
-            SqlCommand command = new SqlCommand($"INSERT INTO SchoolClasses " +
-                $"(Id,Teacher)" +
-                $" VALUES ('{schClass.ClassID}','{schClass.Teacher}')", con);
-            command.ExecuteNonQuery();
-            return schClass;
+            try
+            {
+                SqlCommand command = new SqlCommand($"INSERT INTO SchoolClasses " +
+                    $"(Id,Teacher)" +
+                    $" VALUES ('{schClass.ClassID}','{schClass.Teacher}')", con);
+                command.ExecuteNonQuery();
+                return schClass;
+            }
+            finally
+            {
+                con.Close();
+            }
         }
 
         public double AverageGradePerClass(char classID)
@@ -47,21 +61,28 @@ namespace SchoolSystem
             List<double> avGradeList = new List<double>();
             var con = Connection();
             con.Open();
-            SqlCommand command = new SqlCommand($"SELECT AverageGrade FROM Students " +
-                $"WHERE ClassID='{classID}'",con);
-          
-            SqlDataReader reader = command.ExecuteReader();
-            while(reader.Read())
+            try
             {
-                var avGradePerStudent = reader.GetDouble(0);
-                avGradeList.Add(avGradePerStudent);
+                SqlCommand command = new SqlCommand($"SELECT AverageGrade FROM Students " +
+                    $"WHERE ClassID='{classID}'", con);
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var avGradePerStudent = reader.GetDouble(0);
+                    avGradeList.Add(avGradePerStudent);
+                }
+                foreach (var grade in avGradeList)
+                {
+                    sumGrades += grade;
+                }
+                averageGrade = sumGrades / avGradeList.Count;
+                return averageGrade;
             }
-            foreach(var grade in avGradeList)
+            finally
             {
-                sumGrades += grade;
+                con.Close();
             }
-            averageGrade = sumGrades / avGradeList.Count;
-            return averageGrade;
         }
 
         public List<Student> SortByAverageGrade(char classID)
@@ -69,19 +90,26 @@ namespace SchoolSystem
             List<Student> students = new List<Student>();
             var con = Connection();
             con.Open();
-            SqlCommand command = new SqlCommand($"SELECT* FROM Students " +
-                $" WHERE ClassID='{classID}' " +
-                $"ORDER BY (AverageGrade) DESC", con);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                Student entity = new Student((string)reader["FirstName"],
-                    (string)reader["LastName"], (double)reader["AverageGrade"],
-                    char.Parse((string)reader["ClassID"]));
+                SqlCommand command = new SqlCommand($"SELECT* FROM Students " +
+                    $" WHERE ClassID='{classID}' " +
+                    $"ORDER BY (AverageGrade) DESC", con);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Student entity = new Student((string)reader["FirstName"],
+                        (string)reader["LastName"], (double)reader["AverageGrade"],
+                        char.Parse((string)reader["ClassID"]));
 
-                students.Add(entity);
+                    students.Add(entity);
+                }
+                return students;
             }
-            return students;
+            finally
+            {
+                con.Close();
+            }
 
         }
 
@@ -90,19 +118,26 @@ namespace SchoolSystem
             List<Student> students = new List<Student>();
             var con = Connection();
             con.Open();
-            SqlCommand command = new SqlCommand($"SELECT* FROM Students " +
-                $" WHERE ClassID='{classID}' " +
-                $"ORDER BY (FirstName) ASC", con);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                Student entity = new Student((string)reader["FirstName"],
-                    (string)reader["LastName"], (double)reader["AverageGrade"],
-                    char.Parse((string)reader["ClassID"]));
+                SqlCommand command = new SqlCommand($"SELECT* FROM Students " +
+                    $" WHERE ClassID='{classID}' " +
+                    $"ORDER BY (FirstName) ASC", con);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Student entity = new Student((string)reader["FirstName"],
+                        (string)reader["LastName"], (double)reader["AverageGrade"],
+                        char.Parse((string)reader["ClassID"]));
 
-                students.Add(entity);
+                    students.Add(entity);
+                }
+                return students;
             }
-            return students;
+            finally
+            {
+                con.Close();
+            }
         }
 
         public List<string> DisplayAllClasses()
@@ -110,17 +145,61 @@ namespace SchoolSystem
             List<string> classes = new List<string>();
             var con = Connection();
             con.Open();
-            SqlCommand command = new SqlCommand($"SELECT COUNT(*) AS StudentCount," +
-                $" SchoolClasses.Id, SchoolClasses.Teacher FROM Students "+
-                $"INNER JOIN SchoolClasses ON Students.ClassID = SchoolClasses.Id "+
-                $"GROUP BY SchoolClasses.Id, SchoolClasses.Teacher",con);
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            try
             {
-                classes.Add($" Class: {reader["Id"]}, Teacher: {reader["Teacher"]}," +
-                    $"Student count: {reader["StudentCount"]} ");
+                SqlCommand command = new SqlCommand($"SELECT COUNT(*) AS StudentCount," +
+                    $" SchoolClasses.Id, SchoolClasses.Teacher FROM Students " +
+                    $"INNER JOIN SchoolClasses ON Students.ClassID = SchoolClasses.Id " +
+                    $"GROUP BY SchoolClasses.Id, SchoolClasses.Teacher", con);
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    classes.Add($" Class: {reader["Id"]}, Teacher: {reader["Teacher"]}," +
+                        $"Student count: {reader["StudentCount"]} ");
+                }
+                return classes;
             }
-            return classes;
+            finally
+            {
+                con.Close();
+            }
+        }
+        public List<char> GetClassesID()
+        {
+            List<char> classesID = new List<char>();
+            var con = Connection();
+            con.Open();
+            try
+            {
+                SqlCommand command = new SqlCommand($"SELECT DISTINCT(Id) AS classes FROM SchoolClasses", con);
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    classesID.Add(char.Parse((string)reader["classes"]));
+                }
+                return classesID;
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+        public void CleanDB()
+        {
+            var con = Connection();
+            con.Open();
+            try
+            {
+                SqlCommand command = new SqlCommand("DELETE FROM Student");
+                command.ExecuteNonQuery();
+                command.CommandText = "DELETE FROM SchoolClasses";
+                command.ExecuteNonQuery();
+            }
+            finally
+            {
+                con.Close();
+            }
         }
     }
 }

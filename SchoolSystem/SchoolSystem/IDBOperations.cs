@@ -14,5 +14,7 @@ namespace SchoolSystem
         public List<Student> SortByName(char classID);
 
         public List<string> DisplayAllClasses();
+        public List<char> GetClassesID();
+        public void CleanDB();
     }
 }

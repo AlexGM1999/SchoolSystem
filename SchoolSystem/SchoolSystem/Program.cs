@@ -47,9 +47,8 @@ namespace SchoolSystem
             /*foreach (var classes  in operations.DisplayAllClasses())
             {
                 Console.WriteLine(classes);
-            }*/
-            Generator gen = new Generator();
-            gen.GenerateClasses();
+            }*/           
+            Generator.GenerateStudents();
 
         }
     }
